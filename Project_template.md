@@ -219,25 +219,38 @@ kubectl delete namespace cinemaabyss
 sudo snap install helm --classic
 helm install cinemaabyss ./src/kubernetes/helm --namespace cinemaabyss --create-namespace
 ```
-Если в процессе будет ошибка
-```code
-[2025-04-08 21:43:38,780] ERROR Fatal error during KafkaServer startup. Prepare to shutdown (kafka.server.KafkaServer)
-kafka.common.InconsistentClusterIdException: The Cluster ID OkOjGPrdRimp8nkFohYkCw doesn't match stored clusterId Some(sbkcoiSiQV2h_mQpwy05zQ) in meta.properties. The broker is trying to join the wrong cluster. Configured zookeeper.connect may be wrong.
-```
 
-Проверил развертывание:
+Дальше
 ```bash
 kubectl get pods -n cinemaabyss
 minikube tunnel
+minikube dashboard
 ```
 
-Потом вызвал 
-https://cinemaabyss.example.com/api/movies
+Потом вызвал
+curl http://cinemaabyss.example.com/api/movies
+[скриншоты](./screenshots/events/task4)
 
 ## Удалил все
 
 ```bash
+helm uninstall cinemaabyss
 kubectl delete all --all -n cinemaabyss
 kubectl delete namespace cinemaabyss
 ```
-[скриншоты](./screenshots/events/task4)
+
+ПОЛЕЗНЫЕ КОМАНДЫ
+
+Обновление helm:
+helm upgrade cinemaabyss ./src/kubernetes/helm/ -n cinemaabyss
+
+Перезапуск minikube:
+minikube stop
+minikube delete
+minikube start
+minikube addons enable ingress
+
+kubectl apply -f src/kubernetes/ingress.yaml
+cat /etc/hosts
+kubectl port-forward service/proxy-service 7000:80 -n cinemaabyss
+
