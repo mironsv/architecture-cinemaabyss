@@ -243,7 +243,7 @@ npm run test:kubernetes
 ## Удалил все
 
 ```bash
-helm uninstall cinemaabyss
+helm uninstall cinemaabyss -n cinemaabyss
 kubectl delete all --all -n cinemaabyss
 kubectl delete namespace cinemaabyss
 ```
