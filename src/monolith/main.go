@@ -91,6 +91,7 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 
 // User handlers
 func handleUsers(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("request to /api/users", r.Method)
 	switch r.Method {
 	case "GET":
 		if r.URL.Query().Get("id") != "" {
@@ -99,6 +100,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 			getAllUsers(w, r)
 		}
 	case "POST":
+		fmt.Println("request body", r.Body)
 		createUser(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -160,6 +162,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 // Movie handlers
 func handleMovies(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("request to /api/movies", r.Method)
 	switch r.Method {
 	case "GET":
 		if r.URL.Query().Get("id") != "" {
@@ -168,6 +171,7 @@ func handleMovies(w http.ResponseWriter, r *http.Request) {
 			getAllMovies(w, r)
 		}
 	case "POST":
+		fmt.Println("request body", r.Body)
 		createMovie(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -291,6 +295,7 @@ func createMovie(w http.ResponseWriter, r *http.Request) {
 
 // Payment handlers
 func handlePayments(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("request to /api/payments", r.Method)
 	switch r.Method {
 	case "GET":
 		if r.URL.Query().Get("id") != "" {
@@ -301,6 +306,7 @@ func handlePayments(w http.ResponseWriter, r *http.Request) {
 			getAllPayments(w, r)
 		}
 	case "POST":
+		fmt.Println("request body", r.Body)
 		createPayment(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
@@ -387,6 +393,7 @@ func createPayment(w http.ResponseWriter, r *http.Request) {
 
 // Subscription handlers
 func handleSubscriptions(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("request to /api/subscriptions", r.Method)
 	switch r.Method {
 	case "GET":
 		if r.URL.Query().Get("id") != "" {
@@ -397,6 +404,7 @@ func handleSubscriptions(w http.ResponseWriter, r *http.Request) {
 			getAllSubscriptions(w, r)
 		}
 	case "POST":
+		fmt.Println("request body", r.Body)
 		createSubscription(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)

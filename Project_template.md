@@ -219,21 +219,26 @@ kubectl delete namespace cinemaabyss
 
 Запустил
 ```bash
-sudo snap install helm --classic
-helm install cinemaabyss ./src/kubernetes/helm --namespace cinemaabyss --create-namespace
-```
-
-Дальше
-```bash
-kubectl get pods -n cinemaabyss
+minikube start
+minikube addons enable ingress
 minikube tunnel
 minikube dashboard
+sudo snap install helm --classic
+helm install cinemaabyss ./src/kubernetes/helm --namespace cinemaabyss --create-namespace
+kubectl get pods -n cinemaabyss
 ```
 
 Потом вызвал (http schema)
 curl http://cinemaabyss.example.com/api/movies
 [скриншоты](./screenshots/events/task4)
 curl http://cinemaabyss.example.com/api/events/health
+
+## Запустил тесты
+```bash
+cd tests/postman/
+npm run test:kubernetes
+```
+[скриншоты](./screenshots/events/task4/tests)
 
 ## Удалил все
 
@@ -248,11 +253,9 @@ kubectl delete namespace cinemaabyss
 Обновление helm:
 helm upgrade cinemaabyss ./src/kubernetes/helm/ -n cinemaabyss
 
-Перезапуск minikube:
+Остановка minikube:
 minikube stop
 minikube delete
-minikube start
-minikube addons enable ingress
 
 kubectl apply -f src/kubernetes/ingress.yaml
 cat /etc/hosts

@@ -44,7 +44,7 @@ public class EventConsumerService {
                         movieEvent.getUserId(), movieEvent.getRating());
             } else if (event.getPayload() instanceof LinkedHashMap<?, ?> map) {
                 logger.info("Movie Event Details from LinkedHashMap - Movie ID: {}, Title: '{}', Action: '{}', User ID: {}, Rating: {}",
-                        map.get("movieId"), map.get("title"), map.get("action"), map.get("userId"), map.get("rating"));
+                        map.get("movie_id"), map.get("title"), map.get("action"), map.get("user_id"), map.get("rating"));
             } else {
                 logger.warn("Unexpected payload type for movie event: {}", event.getPayload().getClass().getName());
             }
