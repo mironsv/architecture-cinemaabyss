@@ -214,6 +214,9 @@ template:
 kubectl delete all --all -n cinemaabyss
 kubectl delete namespace cinemaabyss
 ```
+Проверил что в /etc/hosts
+127.0.0.1 cinemaabyss.example.com
+
 Запустил
 ```bash
 sudo snap install helm --classic
@@ -227,9 +230,10 @@ minikube tunnel
 minikube dashboard
 ```
 
-Потом вызвал
+Потом вызвал (http schema)
 curl http://cinemaabyss.example.com/api/movies
 [скриншоты](./screenshots/events/task4)
+curl http://cinemaabyss.example.com/api/events/health
 
 ## Удалил все
 
