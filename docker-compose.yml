@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   # PostgreSQL Database
@@ -58,6 +58,7 @@ services:
     container_name: cinemaabyss-monolith
     depends_on:
       - postgres
+    restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
@@ -74,6 +75,7 @@ services:
     container_name: cinemaabyss-movies-service
     depends_on:
       - postgres
+    restart: unless-stopped
     ports:
       - "8081:8081"
     environment:
@@ -116,8 +118,8 @@ services:
       MONOLITH_URL: http://monolith:8080
       MOVIES_SERVICE_URL: http://movies-service:8081
       EVENTS_SERVICE_URL: http://events-service:8082
-      GRADUAL_MIGRATION: "true"
-      MOVIES_MIGRATION_PERCENT: "50"
+      GRADUAL_MIGRATION: true
+      MOVIES_MIGRATION_PERCENT: 50
     networks:
       - cinemaabyss-network
 

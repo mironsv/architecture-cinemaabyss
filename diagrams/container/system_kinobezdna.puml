@@ -1,0 +1,57 @@
+@startuml containers
+title Система Кинобездна - Диаграмма контейнеров
+!include C4_Container.puml
+
+Person(user, "Пользователь", "Роль: Пользователь системы")
+Person(admin, "Администратор", "Роль: Администратор системы")
+Person(sales_manager, "Менеджер продаж", "Роль: только чтение")
+
+System_Boundary(system, "Система Кинобездна") {
+  Container(api_gw, "API Gateway", "Kong", "Единая точка входа в систему для субъекта")
+  Container(auth_service, "Сервис Auth", "Java", "Аутентификация и авторизация субъекта в системе")
+  Container(user_service, "Сервис управления пользователями", "Java", "Управление пользователями")
+  Container(movie_service, "Сервис каталога фильмов", "Java", "Управление фильмами и стриминг")
+  Container(partner_service, "Сервис для партнеров", "Java", "Интеграция с партнерскими приложениями")
+  Container(pay_service, "Сервис управления платежами", "Java", "Интеграция с платёжной системой")
+  Container(events_service, "Сервис обработки сообщений (MVP)", "Java", "Асинхронная обработка сообщений") #Green
+  Container(monolith, "Остатки монолита", "Go", "Система с монолитной архитектурой") #Brown
+  Container(mb_rabbitmq, "Брокер сообщений", "RabbitMQ", "Передача событий") #Brown
+  Container(mb_kafka, "Брокер сообщений", "Kafka", "Передача событий") #Green
+  ContainerDb(db_auth, "DB Auth", "PostgreSQL", "Auth data")
+  ContainerDb(db_users, "DB Users", "PostgreSQL", "Users data")
+  ContainerDb(db_movies, "DB Movies", "PostgreSQL", "Movies metadata")
+  ContainerDb(db_s3, "DB Video", "S3", "Видеофайлы фильмов")
+  ContainerDb(db_monolith, "DB Monolith", "PostgreSQL", "БД монолита") #Brown
+}
+
+System_Ext(recommend_sys, "Рекомендательная система", "Подборка фильмов")
+System_Ext(pay_sys, "Платежная система", "Обработка платежей")
+System_Ext(partner_sys, "Партнерская система", "Маркетеплейсы")
+
+Rel(user, api_gw, "Пользуется системой")
+Rel(admin, api_gw, "Администрирует систему")
+Rel(sales_manager, api_gw, "Просматривает данные системы (фильмы, пользователи)")
+Rel(api_gw, auth_service, "Auth")
+Rel(api_gw, user_service, "CRUD пользователей")
+Rel(api_gw, movie_service, "CRUD и стриминг фильмов")
+Rel(api_gw, partner_service, "Обменяться данными с партнером")
+Rel(api_gw, pay_service, "Обработать платеж")
+Rel(api_gw, events_service, "Обработать сообщение")
+Rel(api_gw, monolith, "Запросы для оставшихся операций")
+Rel(events_service, mb_kafka, "Запросить подборку фильмов")
+
+Rel(auth_service, db_auth, "Auth user")
+Rel(user_service, db_users, "CRUD users")
+Rel(movie_service, db_movies, "CRUD movies")
+Rel(movie_service, db_s3, "Stream movies")
+Rel(monolith, db_monolith, "CRUD operations all")
+
+Rel(partner_service, partner_sys, "API интеграции с партнерами")
+Rel(pay_service, pay_sys, "Обработка платежей")
+Rel(monolith, mb_rabbitmq, "Получить подборки фильмов")
+Rel(mb_kafka, recommend_sys, "Запросить подборку фильмов")
+Rel(recommend_sys, mb_kafka, "Отправить подборку фильмов")
+Rel(mb_kafka, events_service, "Отправить подборку фильмов")
+Rel(mb_rabbitmq, recommend_sys, "Получить подборку фильмов")
+
+@enduml
